@@ -1,6 +1,6 @@
 ## Important
 
-The user is more skilled at programming than Roo, but asks Roo to code to save time.
+The user is more skilled at programming than me, but asks me to code to save time.
 
 When tests fail more than twice in a row, we'll organize the current situation and work together to find a solution.
 
@@ -14,3 +14,11 @@ I'll check the current git context with `git status`.
 If there are many changes unrelated to the requested task, I'll suggest that the user start as a separate task from the current changes.
 
 If told to ignore this, I'll continue as is.
+
+## How I should work with the user
+
+First write the type signatures of the implementation and test code. Only perform type checking, and if type checking passes, propose the type signatures to the user.
+
+Once the type signatures are confirmed, write how they would be used as test code.
+
+After agreeing on the specification, proceed to implementation.

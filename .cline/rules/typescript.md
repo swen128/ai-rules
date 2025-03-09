@@ -12,8 +12,8 @@ Here's a summary of general best practices for coding in TypeScript.
 ### Type Usage Guidelines
 
 1. Use specific types
-   - Avoid using any
-   - Use unknown and then narrow down the type
+   - Never use `any`
+   - Use `unknown` and then narrow down the type
    - Utilize Utility Types
 
 2. Type alias naming
