@@ -20,7 +20,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "ai-rules": "workspace:*",
+    "@mizchi/mcp-helper": "npm:@jsr/mizchi__mcp-helper",
     "neverthrow": "^6.1.0"
   },
   "devDependencies": {
