@@ -37,12 +37,8 @@ async function main() {
 
   if (existsSync(ROO_MODES_DIR)) {
     const modeFiles = readdirSync(ROO_MODES_DIR);
-    // Only include bun-* files and library-searcher.md
-    const filteredFiles = modeFiles.filter(file => 
-      file.startsWith("bun-") || file === "library-searcher.md"
-    );
     
-    for (const file of filteredFiles) {
+    for (const file of modeFiles) {
       const content = readFileSync(join(ROO_MODES_DIR, file), "utf-8");
       const slug = file.replace(".md", "");
       const [frontMatter, body] = parseFrontMatter(content);
@@ -66,8 +62,7 @@ async function main() {
       if (
         stat.isFile() &&
         entry.endsWith(".md") &&
-        !entry.startsWith("_") &&
-        entry !== "deno.md" // Skip deno.md
+        !entry.startsWith("_")
       ) {
         files.push(entry);
       }
@@ -84,15 +79,7 @@ async function main() {
     }
 
     // Write to .clinerules
-    let result = contents.join("\n\n");
-    if (roomodes.customModes.length > 0) {
-      result += `\nThis project has the following modes defined:`;
-      for (const mode of roomodes.customModes) {
-        result += `\n- ${mode.slug} ${mode.name} at ${
-          join(".cline/roomodes", mode.slug + ".md")
-        }`;
-      }
-    }
+    const result = contents.join("\n\n");
     writeFileSync(
       join(__dirname, "../.roomodes"),
       JSON.stringify(roomodes, null, 2),

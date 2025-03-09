@@ -135,6 +135,11 @@ type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };
 - Assert-first: work backward from expected results
 
 
+## Git Workflow
+
+Follow the conventional commits.
+
+
 ## TypeScript
 
 Here's a summary of general best practices for coding in TypeScript.
@@ -338,9 +343,3 @@ Here's a summary of general best practices for coding in TypeScript.
    - Follow the single responsibility principle
    - Modularize at appropriate granularity
    - Avoid circular references
-
-This project has the following modes defined:
-- library-searcher LibraryResearcher at .cline/roomodes/library-searcher.md
-- bun-tdd Bun:TDD at .cline/roomodes/bun-tdd.md
-- bun-module Bun:Module at .cline/roomodes/bun-module.md
-- bun-script Bun:Script at .cline/roomodes/bun-script.md
