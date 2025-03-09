@@ -1,0 +1,33 @@
+{
+  "name": "mcp",
+  "version": "1.0.0",
+  "description": "Model Context Protocol server",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "bun test",
+    "lint": "bun run eslint .",
+    "format": "bun run prettier --write .",
+    "typecheck": "bun run tsc --noEmit",
+    "test:cov": "bun test --coverage"
+  },
+  "keywords": [
+    "ai",
+    "bun",
+    "mcp",
+    "model-context-protocol"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "ai-rules": "workspace:*",
+    "neverthrow": "^6.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "bun-types": "^1.2.4",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,9 +1,9 @@
 {
-  "name": "ai-rules",
-  "version": "1.0.0",
-  "description": "Custom instructions for AI coding agents",
-  "main": "index.js",
-  "type": "module",
+  "name": "ailab-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "build": "bun run scripts/build.ts",
     "test": "bun test",
@@ -19,18 +19,5 @@
     "code-generation"
   ],
   "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "js-yaml": "^4.1.0",
-    "neverthrow": "^6.1.0",
-    "zod": "^3.22.4"
-  },
-  "devDependencies": {
-    "@types/js-yaml": "^4.0.9",
-    "@types/node": "^20.11.24",
-    "bun-types": "^1.2.4",
-    "eslint": "^8.57.0",
-    "prettier": "^3.2.5",
-    "typescript": "^5.3.3"
-  }
+  "license": "MIT"
 }
