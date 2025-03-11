@@ -8,6 +8,5 @@ export type LogId = string & { _brand: "LogId" };
  * Uses a type-safe approach without type assertions
  */
 export function createLogId(id: string): LogId {
-  // Using a symbol property to create the branded type
-  return Object.assign(id, { _brand: "LogId" }) as LogId;
+  return id as LogId;
 }

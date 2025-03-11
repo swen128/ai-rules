@@ -1,42 +1,22 @@
-/**
- * Adapter for Google Cloud Logging
- */
 import {Logging} from "@google-cloud/logging";
 import {err, ok, Result} from "neverthrow";
-import {buildQueryOptions} from "./utils";
-import {CloudLoggingError, GetLogDetailParams, QueryLogsParams} from "./model/types";
-import {RawLogEntry} from "./model/log-entry";
-
-/**
- * Interface for Cloud Logging adapter
- */
-export interface CloudLoggingApi {
-  /**
-   * Queries logs from Cloud Logging
-   * @param params Query parameters
-   * @returns Result with entries and nextPageToken, or error
-   */
-  queryLogs(params: QueryLogsParams): Promise<Result<{
-    entries: RawLogEntry[];
-    nextPageToken?: string;
-  }, CloudLoggingError>>;
-
-  /**
-   * Gets a log entry by ID
-   * @param params Parameters for getting log details
-   * @returns Result with log entry, or error
-   */
-  getLogEntry(params: GetLogDetailParams): Promise<Result<RawLogEntry, CloudLoggingError>>;
-}
+import {CloudLoggingError, GetLogDetailParams, QueryLogsParams} from "../domain/types";
+import {RawLogEntry} from "../domain/log-entry";
+import {buildQueryOptions} from "../utils";
+import {LogId, createLogId} from "../domain/log-id";
+import { CloudLoggingApi } from "../domain/api";
 
 /**
  * Implementation of Cloud Logging adapter using Google Cloud Logging client
  */
 export class GoogleCloudLoggingApiClient implements CloudLoggingApi {
+
   /**
    * Creates a new GoogleCloudLoggingAdapter
    */
   constructor() {
+    this.
+
   }
 
   /**
@@ -44,7 +24,7 @@ export class GoogleCloudLoggingApiClient implements CloudLoggingApi {
    * @param params Query parameters
    * @returns Result with entries and nextPageToken, or error
    */
-  async queryLogs(params: QueryLogsParams): Promise<Result<{
+   async entries(params): Promise<Result<{
     entries: RawLogEntry[];
     nextPageToken?: string;
   }, CloudLoggingError>> {
@@ -65,17 +45,25 @@ export class GoogleCloudLoggingApiClient implements CloudLoggingApi {
         // Create a new object with string keys and unknown values
         const rawEntry: Record<string, unknown> = {};
         const json = entry.toJSON();
-        
+
         // Copy all properties from json to rawEntry
         // Using type assertion only for this internal conversion
-        const jsonObj = json as Record<string, unknown>;
+        const jsonObj = json as unknown as Record<string, unknown>;
         Object.keys(jsonObj).forEach(key => {
           rawEntry[key] = jsonObj[key];
         });
-        
-        return rawEntry;
+
+        // Ensure insertId is present
+        if (!rawEntry.insertId) {
+          rawEntry.insertId = createLogId(`generated-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`);
+        } else {
+          // Make sure insertId is a LogId
+          rawEntry.insertId = createLogId(String(rawEntry.insertId));
+        }
+
+        return rawEntry as RawLogEntry;
       });
-      
+
       return ok({
         entries: typedEntries,
         nextPageToken: nextPageToken ? String(nextPageToken) : undefined
@@ -84,7 +72,8 @@ export class GoogleCloudLoggingApiClient implements CloudLoggingApi {
       const errorMessage = error instanceof Error ? error.message : String(error);
       return err({
         message: errorMessage,
-        code: (error as any).code
+        code: error instanceof Error && 'code' in error ? 
+          (error as unknown as {code: CloudLoggingError['code']}).code : undefined
       });
     }
   }
@@ -122,12 +111,23 @@ export class GoogleCloudLoggingApiClient implements CloudLoggingApi {
         });
       }
 
-      return ok(entry.toJSON() as unknown as RawLogEntry);
+      const rawEntry = entry.toJSON() as unknown as Record<string, unknown>;
+      
+      // Ensure insertId is present
+      if (!rawEntry.insertId) {
+        rawEntry.insertId = logId;
+      } else {
+        // Make sure insertId is a LogId
+        rawEntry.insertId = createLogId(String(rawEntry.insertId));
+      }
+
+      return ok(rawEntry as RawLogEntry);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       return err({
         message: errorMessage,
-        code: (error as any).code
+        code: error instanceof Error && 'code' in error ? 
+          (error as unknown as {code: CloudLoggingError['code']}).code : undefined
       });
     }
   }

@@ -2,13 +2,14 @@
  * Cache implementation for Cloud Logging MCP server
  */
 
-import {LogId} from "./model/log-id";
-import {RawLogEntry} from "./model/log-entry";
+import {LogId} from "../domain/log-id";
+import {RawLogEntry} from "../domain/log-entry";
+import { LogCache } from "../domain/cache";
 
 /**
  * Cache configuration
  */
-export interface CacheConfig {
+interface CacheConfig {
   /** Time-to-live in milliseconds */
   ttlMs: number;
   /** Maximum number of entries to store */
@@ -18,33 +19,9 @@ export interface CacheConfig {
 /**
  * Interface for log cache entries
  */
-export interface LogCacheEntry {
+interface LogCacheEntry {
   entry: RawLogEntry;
   timestamp: number;
-}
-
-/**
- * Interface for log cache
- */
-export interface LogCache {
-  /**
-   * Adds an entry to the cache
-   * @param id The log ID
-   * @param entry The log entry
-   */
-  add(id: LogId, entry: RawLogEntry): void;
-
-  /**
-   * Gets an entry from the cache
-   * @param id The log ID
-   * @returns The log entry or undefined if not found or expired
-   */
-  get(id: LogId): RawLogEntry | undefined;
-
-  /**
-   * Number of entries in the cache
-   */
-  readonly size: number;
 }
 
 /**
@@ -53,6 +30,7 @@ export interface LogCache {
 export class LogCacheImpl implements LogCache {
   private cache: Map<LogId, LogCacheEntry> = new Map();
   private readonly maxEntries: number;
+  private readonly ttlMs: number;
 
   /**
    * Creates a new LogCache instance
@@ -60,6 +38,7 @@ export class LogCacheImpl implements LogCache {
    */
   constructor(config?: Partial<CacheConfig>) {
     this.maxEntries = config?.maxEntries ?? 1000; // Default: 1000 entries
+    this.ttlMs = config?.ttlMs ?? 30 * 60 * 1000; // Default: 30 minutes
   }
 
   /**
@@ -89,14 +68,13 @@ export class LogCacheImpl implements LogCache {
     const cached = this.cache.get(id);
     if (!cached) return undefined;
 
-    return cached.entry;
-  }
+    // Check if entry is expired
+    if (Date.now() - cached.timestamp > this.ttlMs) {
+      this.cache.delete(id);
+      return undefined;
+    }
 
-  /**
-   * Number of entries in the cache
-   */
-  get size(): number {
-    return this.cache.size;
+    return cached.entry;
   }
 
   /**
