@@ -88,6 +88,8 @@ export class LogCacheImpl implements LogCache {
 
     // Remove oldest entries to make room
     const toRemove = entries.slice(0, Math.max(1, Math.floor(this.maxEntries * 0.1))); // Remove at least 1 entry or 10% of max
-    toRemove.forEach(([key]) => this.cache.delete(key));
+    for (const [key] of toRemove) {
+      this.cache.delete(key);
+    }
   }
 }

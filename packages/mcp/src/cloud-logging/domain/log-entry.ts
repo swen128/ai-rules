@@ -58,7 +58,7 @@ export function createLogSummary(entry: RawLogEntry, summaryFields?: string[]): 
 
   // Add any explicitly requested fields
   if (summaryFields) {
-    summaryFields.forEach((field) => {
+    for (const field of summaryFields) {
       const value = getValueByPath(entry, field);
 
       if (value !== undefined) {
@@ -66,7 +66,7 @@ export function createLogSummary(entry: RawLogEntry, summaryFields?: string[]): 
         const key = field.split(".").pop() || field;
         summary[key] = value;
       }
-    });
+    }
   }
 
   return summary;

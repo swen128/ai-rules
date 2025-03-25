@@ -3,9 +3,9 @@
  * Script to combine prompt files and generate .clinerules
  */
 
-import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "fs";
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import yaml from "js-yaml";
 
 const __filename = fileURLToPath(import.meta.url);

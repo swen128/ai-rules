@@ -44,9 +44,9 @@ export class GoogleCloudLoggingApiClient implements CloudLoggingApi {
         // Copy all properties from json to rawEntry
         // Using type assertion only for this internal conversion
         const jsonObj = json as unknown as Record<string, unknown>;
-        Object.keys(jsonObj).forEach((key) => {
+        for (const key of Object.keys(jsonObj)) {
           rawEntry[key] = jsonObj[key];
-        });
+        }
 
         // Ensure insertId is present
         if (!rawEntry.insertId) {

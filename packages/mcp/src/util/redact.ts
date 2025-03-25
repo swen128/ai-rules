@@ -21,7 +21,7 @@ export function redactSensitiveInfo(text: string): string {
   if (!text) return text;
 
   let redactedText = text;
-  SENSITIVE_PATTERNS.forEach((pattern) => {
+  for (const pattern of SENSITIVE_PATTERNS) {
     redactedText = redactedText.replace(pattern, (match) => {
       if (pattern.toString().includes("key|api")) {
         // For API keys, preserve first and last 4 chars
@@ -33,7 +33,7 @@ export function redactSensitiveInfo(text: string): string {
       }
       return "*".repeat(match.length);
     });
-  });
+  }
 
   return redactedText;
 }
