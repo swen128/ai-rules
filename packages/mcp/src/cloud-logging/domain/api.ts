@@ -1,5 +1,5 @@
-import { Result } from "neverthrow";
-import { RawLogEntry } from "./log-entry";
+import {Result} from "neverthrow";
+import {RawLogEntry} from "./log-entry";
 
 /**
  * Interface for Cloud Logging adapter
@@ -10,7 +10,7 @@ export interface CloudLoggingApi {
    * @param params Query parameters
    * @returns Result with entries and nextPageToken, or error
    */
-  entries(params: QueryLogsParams): Promise<
+  entries(params: CloudLoggingQuery): Promise<
     Result<
       {
         entries: RawLogEntry[];
@@ -21,7 +21,7 @@ export interface CloudLoggingApi {
   >;
 }
 
-type QueryLogsParam = {
+interface CloudLoggingQuery {
   projectId: string;
   filter: string;
   resourceNames?: string[]; // e.g. "projects/project_id/logs/run.googleapis.com%2Fstdout"
@@ -31,7 +31,7 @@ type QueryLogsParam = {
     timestamp: "asc" | "desc";
   };
   summaryFields?: string[]; // Fields to include in the summary, e.g. ["labels.service", "textPayload"]
-};
+}
 
 /**
  * Error types for Cloud Logging operations

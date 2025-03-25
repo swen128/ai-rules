@@ -6,7 +6,7 @@ export const createServer = () => {
     version: "1.0.0",
   });
 
-  // TODO Add tools
+  // TODO: Add tools
   // server.tool()
 
   return server;
