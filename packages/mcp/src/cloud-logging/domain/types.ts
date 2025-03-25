@@ -2,8 +2,8 @@
  * Common type definitions for Cloud Logging MCP server
  */
 
-import {LogSummary} from "./log-entry";
-import {LogId} from "./log-id";
+import type { LogSummary } from "./log-entry";
+import type { LogId } from "./log-id";
 
 /**
  * Error types for Cloud Logging operations
@@ -44,7 +44,6 @@ export type CloudLoggingTools = {
     result: GetLogDetailResponse;
   };
 };
-
 
 /**
  * Parameters for querying logs

@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { LogCache } from "../domain/cache";
-import { CloudLoggingApi } from "../domain/api";
+import type { CloudLoggingApi } from "../domain/api";
+import type { LogCache } from "../domain/cache";
 
 const inputSchema = z.object({
   projectId: z.string(),
@@ -8,9 +8,8 @@ const inputSchema = z.object({
   resourceNames: z
     .array(
       z.string({
-        description:
-          "e.g. 'projects/<project_id>/logs/run.googleapis.com%2Fstdout'",
-      })
+        description: "e.g. 'projects/<project_id>/logs/run.googleapis.com%2Fstdout'",
+      }),
     )
     .optional(),
   pageSize: z.number().optional(),
@@ -23,9 +22,8 @@ const inputSchema = z.object({
   summaryFields: z
     .array(
       z.string({
-        description:
-          "Fields to include in the summary, e.g. ['labels.service', 'textPayload']",
-      })
+        description: "Fields to include in the summary, e.g. ['labels.service', 'textPayload']",
+      }),
     )
     .optional(),
 });
@@ -35,7 +33,7 @@ const outputSchema = z.object({
     z.object({
       id: z.string(),
       summary: z.string(),
-    })
+    }),
   ),
   pageSize: z.number(),
   nextPageToken: z.string().optional(),

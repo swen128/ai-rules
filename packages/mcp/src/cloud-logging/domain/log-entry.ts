@@ -1,6 +1,6 @@
 import { redactSensitiveInfo } from "../../util/redact";
 import { formatTimestamp, getValueByPath } from "../utils";
-import { LogId, createLogId } from "./log-id";
+import { type LogId, createLogId } from "./log-id";
 
 /**
  * Raw log entry from Google Cloud Logging
@@ -40,10 +40,7 @@ export type LogSummary = {
  * @param summaryFields Optional fields to include in the summary
  * @returns A LogSummary object
  */
-export function createLogSummary(
-  entry: RawLogEntry,
-  summaryFields?: string[]
-): LogSummary {
+export function createLogSummary(entry: RawLogEntry, summaryFields?: string[]): LogSummary {
   const metadata = (entry.metadata as Record<string, unknown>) || {};
 
   // Extract values with type safety
@@ -114,9 +111,7 @@ function extractSummary(entry: RawLogEntry, summaryFields?: string[]): string {
   // 3. Stringify and truncate
   const stringified = JSON.stringify(payload || entry);
   return redactSensitiveInfo(
-    stringified.length > 200
-      ? stringified.substring(0, 197) + "..."
-      : stringified
+    stringified.length > 200 ? `${stringified.substring(0, 197)}...` : stringified,
   );
 }
 

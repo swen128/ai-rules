@@ -1,5 +1,5 @@
-import { CloudLoggingApi } from "../domain/api";
-import { LogCache } from "../domain/cache";
+import type { CloudLoggingApi } from "../domain/api";
+import type { LogCache } from "../domain/cache";
 import { getLogDetailTool } from "./getLogDetail";
 import { queryLogsTool } from "./queryLogs";
 

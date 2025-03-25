@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { LogCache } from "../domain/cache";
-import { CloudLoggingApi } from "../domain/api";
+import type { CloudLoggingApi } from "../domain/api";
+import type { LogCache } from "../domain/cache";
 
 const inputSchema = z.object({
   projectId: z.string(),

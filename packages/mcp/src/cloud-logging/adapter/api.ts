@@ -1,19 +1,14 @@
 import { Logging } from "@google-cloud/logging";
-import { err, ok, Result } from "neverthrow";
-import { CloudLoggingError } from "../domain/types";
-import { RawLogEntry } from "../domain/log-entry";
+import { type Result, err, ok } from "neverthrow";
+import type { CloudLoggingApi } from "../domain/api";
+import type { RawLogEntry } from "../domain/log-entry";
 import { LogId, createLogId } from "../domain/log-id";
-import { CloudLoggingApi } from "../domain/api";
+import type { CloudLoggingError } from "../domain/types";
 
 /**
  * Implementation of Cloud Logging adapter using Google Cloud Logging client
  */
 export class GoogleCloudLoggingApiClient implements CloudLoggingApi {
-  /**
-   * Creates a new GoogleCloudLoggingAdapter
-   */
-  constructor() {}
-
   /**
    * Queries logs from Cloud Logging
    * @param params Query parameters
@@ -56,7 +51,7 @@ export class GoogleCloudLoggingApiClient implements CloudLoggingApi {
         // Ensure insertId is present
         if (!rawEntry.insertId) {
           rawEntry.insertId = createLogId(
-            `generated-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
+            `generated-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
           );
         } else {
           // Make sure insertId is a LogId
@@ -71,8 +66,7 @@ export class GoogleCloudLoggingApiClient implements CloudLoggingApi {
         nextPageToken: nextPageToken ? String(nextPageToken) : undefined,
       });
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
       return err({
         message: errorMessage,
         code:

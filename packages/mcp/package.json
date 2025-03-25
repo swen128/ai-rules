@@ -11,12 +11,7 @@
     "typecheck": "bun run tsc --noEmit",
     "test:cov": "bun test --coverage"
   },
-  "keywords": [
-    "ai",
-    "bun",
-    "mcp",
-    "model-context-protocol"
-  ],
+  "keywords": ["ai", "bun", "mcp", "model-context-protocol"],
   "author": "",
   "license": "MIT",
   "dependencies": {

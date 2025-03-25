@@ -1,5 +1,5 @@
-import {Result} from "neverthrow";
-import {RawLogEntry} from "./log-entry";
+import type { Result } from "neverthrow";
+import type { RawLogEntry } from "./log-entry";
 
 /**
  * Interface for Cloud Logging adapter

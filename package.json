@@ -1,23 +1,21 @@
 {
   "name": "ai-hand",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": ["packages/*"],
   "scripts": {
     "build": "bun run scripts/build.ts",
     "test": "bun test",
-    "lint": "bun run eslint .",
-    "format": "bun run prettier --write .",
+    "lint": "bunx biome lint .",
+    "format": "bunx biome format --write .",
+    "check": "bunx biome check --write .",
     "typecheck": "bun run tsc --noEmit",
     "check:deps": "bun run check-dependencies",
     "test:cov": "bun test --coverage"
   },
-  "keywords": [
-    "ai",
-    "bun",
-    "code-generation"
-  ],
+  "keywords": ["ai", "bun", "code-generation"],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4"
+  }
 }

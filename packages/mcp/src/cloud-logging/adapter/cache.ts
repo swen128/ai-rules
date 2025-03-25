@@ -2,9 +2,9 @@
  * Cache implementation for Cloud Logging MCP server
  */
 
-import {LogId} from "../domain/log-id";
-import {RawLogEntry} from "../domain/log-entry";
-import { LogCache } from "../domain/cache";
+import type { LogCache } from "../domain/cache";
+import type { RawLogEntry } from "../domain/log-entry";
+import type { LogId } from "../domain/log-id";
 
 /**
  * Cache configuration
@@ -55,7 +55,7 @@ export class LogCacheImpl implements LogCache {
     // Add to cache
     this.cache.set(id, {
       entry,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 
@@ -82,8 +82,9 @@ export class LogCacheImpl implements LogCache {
    */
   private evictOldestEntries(): void {
     // Convert to array, sort by timestamp, and remove oldest
-    const entries = Array.from(this.cache.entries())
-      .sort((a, b) => a[1].timestamp - b[1].timestamp);
+    const entries = Array.from(this.cache.entries()).sort(
+      (a, b) => a[1].timestamp - b[1].timestamp,
+    );
 
     // Remove oldest entries to make room
     const toRemove = entries.slice(0, Math.max(1, Math.floor(this.maxEntries * 0.1))); // Remove at least 1 entry or 10% of max

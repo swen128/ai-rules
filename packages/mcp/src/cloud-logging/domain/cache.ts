@@ -1,5 +1,5 @@
-import { RawLogEntry } from "./log-entry";
-import { LogId } from "./log-id";
+import type { RawLogEntry } from "./log-entry";
+import type { LogId } from "./log-id";
 
 /**
  * Interface for log cache

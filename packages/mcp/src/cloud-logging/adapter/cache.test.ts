@@ -1,7 +1,7 @@
 import { describe, expect, jest, test } from "bun:test";
-import { LogCacheImpl } from "./cache";
+import type { RawLogEntry } from "../domain/log-entry";
 import { createLogId } from "../domain/log-id";
-import { RawLogEntry } from "../domain/log-entry";
+import { LogCacheImpl } from "./cache";
 
 describe("LogCache", () => {
   test("should add and retrieve entries", () => {

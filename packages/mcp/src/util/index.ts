@@ -1,4 +1,4 @@
-export {redactSensitiveInfo} from "./redact"
+export { redactSensitiveInfo } from "./redact";
 
 /**
  * Extracts a value from an object using a dot-notation path
@@ -7,11 +7,11 @@ export {redactSensitiveInfo} from "./redact"
  * @returns The extracted value or undefined if not found
  */
 export function getValueByPath(obj: Record<string, unknown>, path: string): unknown {
-  const parts = path.split('.');
+  const parts = path.split(".");
   let current = obj;
 
   for (const part of parts) {
-    if (current && typeof current === 'object' && part in current) {
+    if (current && typeof current === "object" && part in current) {
       current = current[part];
     } else {
       return undefined;
@@ -20,4 +20,3 @@ export function getValueByPath(obj: Record<string, unknown>, path: string): unkn
 
   return current;
 }
-

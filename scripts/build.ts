@@ -3,10 +3,10 @@
  * Script to combine prompt files and generate .clinerules
  */
 
-import { join, dirname } from "path";
-import { readFileSync, writeFileSync, existsSync, statSync, readdirSync } from "fs";
-import yaml from "js-yaml";
+import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "fs";
+import { dirname, join } from "path";
 import { fileURLToPath } from "url";
+import yaml from "js-yaml";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -37,13 +37,13 @@ async function main() {
 
   if (existsSync(ROO_MODES_DIR)) {
     const modeFiles = readdirSync(ROO_MODES_DIR);
-    
+
     for (const file of modeFiles) {
       const content = readFileSync(join(ROO_MODES_DIR, file), "utf-8");
       const slug = file.replace(".md", "");
       const [frontMatter, body] = parseFrontMatter(content);
       const results: RooMode = {
-        ...frontMatter as Record<string, unknown>,
+        ...(frontMatter as Record<string, unknown>),
         slug,
         name: (frontMatter.name as string) || slug,
         roleDefinition: body,
@@ -59,11 +59,7 @@ async function main() {
     const entries = readdirSync(RULES_DIR);
     for (const entry of entries) {
       const stat = statSync(join(RULES_DIR, entry));
-      if (
-        stat.isFile() &&
-        entry.endsWith(".md") &&
-        !entry.startsWith("_")
-      ) {
+      if (stat.isFile() && entry.endsWith(".md") && !entry.startsWith("_")) {
         files.push(entry);
       }
     }
@@ -80,13 +76,8 @@ async function main() {
 
     // Write to .clinerules
     const result = contents.join("\n\n");
-    writeFileSync(
-      join(__dirname, "../.roomodes"),
-      JSON.stringify(roomodes, null, 2),
-    );
-    console.log(
-      `Generated .roomodes from ${roomodes.customModes.length} mode files`,
-    );
+    writeFileSync(join(__dirname, "../.roomodes"), JSON.stringify(roomodes, null, 2));
+    console.log(`Generated .roomodes from ${roomodes.customModes.length} mode files`);
 
     writeFileSync(OUTPUT_FILE, result);
     console.log(`Generated ${OUTPUT_FILE} from ${files.length} prompt files`);
