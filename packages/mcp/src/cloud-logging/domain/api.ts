@@ -21,7 +21,7 @@ export interface CloudLoggingApi {
   >;
 }
 
-interface CloudLoggingQuery {
+export interface CloudLoggingQuery {
   projectId: string;
   filter: string;
   resourceNames?: string[]; // e.g. "projects/project_id/logs/run.googleapis.com%2Fstdout"
@@ -47,7 +47,7 @@ type CloudLoggingErrorCode =
 /**
  * Error details for Cloud Logging operations
  */
-type CloudLoggingError = {
+export type CloudLoggingError = {
   message: string;
   code?: CloudLoggingErrorCode;
 };

@@ -1,5 +1,4 @@
 import { redactSensitiveInfo } from "../../util/redact";
-import { formatTimestamp, getValueByPath } from "../utils";
 import { type LogId, createLogId } from "./log-id";
 
 /**
@@ -40,36 +39,11 @@ export type LogSummary = {
  * @param summaryFields Optional fields to include in the summary
  * @returns A LogSummary object
  */
-export function createLogSummary(entry: RawLogEntry, summaryFields?: string[]): LogSummary {
-  const metadata = (entry.metadata as Record<string, unknown>) || {};
-
-  // Extract values with type safety
-  const timestamp = metadata.timestamp;
-  const severity = metadata.severity as LogSeverity | undefined;
-  const metadataInsertId = metadata.insertId as string | undefined;
-
-  // Create the summary
-  const summary: LogSummary = {
-    insertId: entry.insertId,
-    timestamp: formatTimestamp(timestamp),
-    severity: severity || "DEFAULT",
-    summary: extractSummary(entry, summaryFields),
-  };
-
-  // Add any explicitly requested fields
-  if (summaryFields) {
-    for (const field of summaryFields) {
-      const value = getValueByPath(entry, field);
-
-      if (value !== undefined) {
-        // Use the last part of the field path as the key
-        const key = field.split(".").pop() || field;
-        summary[key] = value;
-      }
-    }
-  }
-
-  return summary;
+export function createLogSummary(
+  entry: RawLogEntry,
+  summaryFields?: string[]
+): LogSummary {
+  // TODO: Implement this
 }
 
 /**
@@ -79,40 +53,7 @@ export function createLogSummary(entry: RawLogEntry, summaryFields?: string[]): 
  * @returns A summary string
  */
 function extractSummary(entry: RawLogEntry, summaryFields?: string[]): string {
-  // If summary fields are specified, try to extract them
-  if (summaryFields && summaryFields.length > 0) {
-    const extractedValues = summaryFields
-      .map((field) => {
-        const value = getValueByPath(entry, field);
-        return value !== undefined ? String(value) : undefined;
-      })
-      .filter(Boolean);
-
-    if (extractedValues.length > 0) {
-      return redactSensitiveInfo(extractedValues.join(" | "));
-    }
-  }
-
-  // Fallback strategy
-  // 1. Look for textPayload
-  if (entry.textPayload) {
-    return redactSensitiveInfo(String(entry.textPayload));
-  }
-
-  // 2. Look for message in jsonPayload or protoPayload
-  const payload =
-    (entry.jsonPayload as Record<string, unknown>) ||
-    (entry.protoPayload as Record<string, unknown>);
-  if (payload) {
-    const message = findMessage(payload);
-    if (message) return redactSensitiveInfo(message);
-  }
-
-  // 3. Stringify and truncate
-  const stringified = JSON.stringify(payload || entry);
-  return redactSensitiveInfo(
-    stringified.length > 200 ? `${stringified.substring(0, 197)}...` : stringified,
-  );
+  // TODO: Implement this
 }
 
 /**
