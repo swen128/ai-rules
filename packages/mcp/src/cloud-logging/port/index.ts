@@ -7,8 +7,5 @@ export const createTools = (dependencies: {
   api: CloudLoggingApi;
   cache: LogCache;
 }) => {
-  return {
-    queryLogs: queryLogsTool(dependencies),
-    getLogDetail: getLogDetailTool(dependencies),
-  };
+  return [queryLogsTool(dependencies), getLogDetailTool(dependencies)];
 };
