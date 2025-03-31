@@ -1,5 +1,5 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { createCloudLoggingTools } from "./cloud-logging/index.js"; // Use index.js for clarity
+import {McpServer} from "@modelcontextprotocol/sdk/server/mcp.js";
+import {createCloudLoggingTools} from "./cloud-logging";
 
 export const createServer = () => {
   const server = new McpServer({
@@ -7,11 +7,11 @@ export const createServer = () => {
     version: "1.0.0",
   });
 
-  const cloudLoggingTools = createCloudLoggingTools();
-  
-  for (const {name, description, handler, inputSchema} of cloudLoggingTools) {
-    server.tool(name, description, inputSchema, handler)
-  }
+  const {queryLogs, getLogDetail} = createCloudLoggingTools();
+
+  // TODO: Make this DRY
+  server.tool(queryLogs.name, queryLogs.description, {input: queryLogs.inputSchema}, queryLogs.handler);
+  server.tool(getLogDetail.name, getLogDetail.description, {input: getLogDetail.inputSchema}, getLogDetail.handler);
 
   return server;
 };

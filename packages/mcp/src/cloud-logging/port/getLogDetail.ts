@@ -1,28 +1,39 @@
-import { z } from "zod";
-import type { CloudLoggingApi } from "../domain/api";
-import type { LogCache } from "../domain/cache";
+import {z} from "zod";
+import type {CloudLoggingApi} from "../domain/api";
+import type {LogCache} from "../domain/cache";
+import {getLogDetail} from "../domain/get-log-detail";
+import type {ToolCallback} from "@modelcontextprotocol/sdk/server/mcp.js";
 
 const inputSchema = z.object({
   projectId: z.string(),
   logId: z.string(),
 });
 
-const outputSchema = z.string();
-
 export type GetLogDetailInput = z.infer<typeof inputSchema>;
-type GetLogDetailOutput = z.infer<typeof outputSchema>;
 
 export const getLogDetailTool = (dependencies: {
   api: CloudLoggingApi;
   cache: LogCache;
-}) => {
+}): Tool<typeof inputSchema> => {
   return {
     name: "getLogDetail",
     description: "Returns the whole record of a log with the given ID",
     inputSchema: inputSchema,
-    outputSchema: outputSchema,
-    handler: async (input: GetLogDetailInput): Promise<GetLogDetailOutput> => {
-      return JSON.stringify(input);
+    handler: async ({input}: {input: GetLogDetailInput}) => {
+      return {
+        content: [{
+          type: "text" as const,
+          text: getLogDetail(dependencies)(input)
+        }],
+      };
     },
   };
 };
+
+// TODO: This type is shared between the tools. Consider moving it to a common location.
+type Tool<InputSchema extends z.ZodTypeAny> = {
+  name: string;
+  description: string;
+  inputSchema: InputSchema;
+  handler: ToolCallback<{ input: InputSchema }>;
+}
