@@ -52,6 +52,15 @@ The server exposes two main tools through the MCP protocol:
 1. `queryLogs` - Search for logs with filtering and pagination
 2. `getLogDetail` - Retrieve complete information for a specific log
 
+## Internal Architecture
+
+This module follows Domain-Driven Design (DDD) and Ports & Adapters (Hexagonal Architecture) principles to separate concerns and enhance testability:
+
+-   **`domain/`**: Contains the core business logic, types (like `LogId`, `LogEntry`), and interfaces (ports) for external dependencies (API, cache). See [`domain/README.md`](./domain/README.md) for details.
+-   **`adapter/`**: Provides concrete implementations (adapters) for the domain interfaces, connecting to the actual Google Cloud Logging API and providing an in-memory cache. See [`adapter/README.md`](./adapter/README.md) for details.
+-   **`port/`**: Defines the entry points (ports) for interacting with the feature, exposing the `queryLogs` and `getLogDetail` tools with schema validation (`zod`) and dependency injection. See [`port/README.md`](./port/README.md) for details.
+-   **`index.ts`**: Exports the necessary functions or tools, likely orchestrating the creation and wiring of components.
+
 ## Usage
 
 Since this is an MCP server, AI agents interact with it through the MCP protocol. Here's how the tools would be used:
