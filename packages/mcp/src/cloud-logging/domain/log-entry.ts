@@ -1,26 +1,6 @@
-import { redactSensitiveInfo } from "../../util/redact";
-import { type LogId, createLogId } from "./log-id";
-
-/**
- * Raw log entry from Google Cloud Logging
- */
-export type RawLogEntry = Record<string, unknown> & {
-  insertId: LogId;
-};
-
-/**
- * Severity levels for log entries
- */
-export type LogSeverity =
-  | "DEFAULT"
-  | "DEBUG"
-  | "INFO"
-  | "NOTICE"
-  | "WARNING"
-  | "ERROR"
-  | "CRITICAL"
-  | "ALERT"
-  | "EMERGENCY";
+import { redactSensitiveInfo, getValueByPath } from "../../util";
+import type { LogSeverity, RawLogEntry } from "./api";
+import type { LogId } from "./log-id";
 
 /**
  * Log entry summary with essential information
@@ -30,30 +10,58 @@ export type LogSummary = {
   timestamp: string;
   severity: LogSeverity;
   summary: string;
-  [key: string]: unknown;
 };
 
-/**
- * Creates a log summary from a log entry
- * @param entry The log entry
- * @param summaryFields Optional fields to include in the summary
- * @returns A LogSummary object
- */
-export function createLogSummary(
+export function summarize(
   entry: RawLogEntry,
   summaryFields?: string[]
 ): LogSummary {
-  // TODO: Implement this
+  const summary = extractLogSummaryText(entry, summaryFields);
+
+  return {
+    insertId: entry.insertId,
+    timestamp: entry.timestamp,
+    severity: entry.severity,
+    summary,
+  };
 }
 
-/**
- * Extracts a summary from a log entry
- * @param entry The log entry
- * @param summaryFields Optional fields to include in the summary
- * @returns A summary string
- */
-function extractSummary(entry: RawLogEntry, summaryFields?: string[]): string {
-  // TODO: Implement this
+function extractLogSummaryText(
+  entry: RawLogEntry,
+  summaryFields?: string[]
+): string {
+  if (summaryFields && summaryFields.length > 0) {
+    const parts: string[] = [];
+
+    for (const field of summaryFields) {
+      const value = getValueByPath(entry, field);
+      if (value !== undefined) {
+        parts.push(`${field}: ${String(value)}`);
+      }
+    }
+
+    if (parts.length > 0) {
+      return redactSensitiveInfo(parts.join(", "));
+    }
+  }
+
+  if (typeof entry.textPayload === "string") {
+    return redactSensitiveInfo(entry.textPayload);
+  }
+
+  if (entry.jsonPayload && typeof entry.jsonPayload === "object") {
+    const jsonPayload = entry.jsonPayload as Record<string, unknown>;
+    if (typeof jsonPayload.message === "string") {
+      return redactSensitiveInfo(jsonPayload.message);
+    }
+
+    const message = findMessage(jsonPayload);
+    if (message) {
+      return redactSensitiveInfo(message);
+    }
+  }
+
+  return `${JSON.stringify(entry).substring(0, 100)}...`;
 }
 
 /**

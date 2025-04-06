@@ -1,5 +1,5 @@
 import type { Result } from "neverthrow";
-import type { RawLogEntry } from "./log-entry";
+import type { LogId } from "./log-id";
 
 /**
  * Interface for Cloud Logging adapter
@@ -51,3 +51,20 @@ export type CloudLoggingError = {
   message: string;
   code?: CloudLoggingErrorCode;
 };
+
+export type RawLogEntry = Record<string, unknown> & {
+  insertId: LogId;
+  timestamp: string;
+  severity: LogSeverity;
+};
+
+export type LogSeverity =
+  | "DEFAULT"
+  | "DEBUG"
+  | "INFO"
+  | "NOTICE"
+  | "WARNING"
+  | "ERROR"
+  | "CRITICAL"
+  | "ALERT"
+  | "EMERGENCY";

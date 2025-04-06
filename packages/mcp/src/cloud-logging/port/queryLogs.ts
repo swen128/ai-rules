@@ -2,6 +2,7 @@ import {z} from "zod";
 import type {CloudLoggingApi} from "../domain/api";
 import type {LogCache} from "../domain/cache";
 import type {ToolCallback} from "@modelcontextprotocol/sdk/server/mcp.js";
+import {queryLogs} from "../domain/query-logs";
 
 const inputSchema = z.object({
   projectId: z.string(),
@@ -52,13 +53,22 @@ export const queryLogsTool = (dependencies: {
     description: "Returns a list of log summaries based on the given query",
     inputSchema: inputSchema,
     handler: async ({input}: { input: QueryLogsInput }) => {
-      // TODO: Implement the handler
-      return {
-        content: [{
-          type: "text",
-          text: "Query logs handler not implemented yet.",
-        }],
-      };
+      const result = await queryLogs(dependencies)(input);
+      
+      return result.match(
+        (data) => ({
+          content: [{
+            type: "text" as const,
+            text: JSON.stringify(data, null, 2),
+          }],
+        }),
+        (error) => ({
+          content: [{
+            type: "text" as const,
+            text: `Error querying logs: ${error.message}`,
+          }],
+        })
+      );
     },
   };
 };
