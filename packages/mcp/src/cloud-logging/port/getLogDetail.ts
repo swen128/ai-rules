@@ -1,8 +1,8 @@
-import {z} from "zod";
-import type {CloudLoggingApi} from "../domain/api";
-import type {LogCache} from "../domain/cache";
-import {getLogDetail} from "../domain/get-log-detail";
-import type {ToolCallback} from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { ToolCallback } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { z } from "zod";
+import type { CloudLoggingApi } from "../domain/api";
+import type { LogCache } from "../domain/cache";
+import { getLogDetail } from "../domain/get-log-detail";
 
 const inputSchema = z.object({
   projectId: z.string(),
@@ -19,12 +19,14 @@ export const getLogDetailTool = (dependencies: {
     name: "getLogDetail",
     description: "Returns the whole record of a log with the given ID",
     inputSchema: inputSchema,
-    handler: async ({input}: {input: GetLogDetailInput}) => {
+    handler: async ({ input }: { input: GetLogDetailInput }) => {
       return {
-        content: [{
-          type: "text" as const,
-          text: getLogDetail(dependencies)(input)
-        }],
+        content: [
+          {
+            type: "text" as const,
+            text: getLogDetail(dependencies)(input),
+          },
+        ],
       };
     },
   };
@@ -36,4 +38,4 @@ type Tool<InputSchema extends z.ZodTypeAny> = {
   description: string;
   inputSchema: InputSchema;
   handler: ToolCallback<{ input: InputSchema }>;
-}
+};

@@ -1,6 +1,5 @@
 import type { Result } from "neverthrow";
-import type { CloudLoggingApi, CloudLoggingQuery } from "../domain/api";
-import type { RawLogEntry } from "../domain/log-entry";
+import type { CloudLoggingApi, CloudLoggingQuery, RawLogEntry } from "../domain/api";
 import type { CloudLoggingError } from "../domain/api";
 
 export class GoogleCloudLoggingApiClient implements CloudLoggingApi {

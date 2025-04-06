@@ -1,5 +1,5 @@
-import type {Result} from "neverthrow";
-import type {LogId} from "./log-id";
+import type { Result } from "neverthrow";
+import type { LogId } from "./log-id";
 
 /**
  * Interface for Cloud Logging adapter
