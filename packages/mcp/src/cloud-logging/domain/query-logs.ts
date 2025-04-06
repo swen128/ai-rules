@@ -30,14 +30,7 @@ export const queryLogs =
     const { api, cache } = dependencies;
 
     // Call the Cloud Logging API to get entries
-    const result = await api.entries({
-      projectId: input.projectId,
-      filter: input.filter,
-      resourceNames: input.resourceNames,
-      pageSize: input.pageSize,
-      pageToken: input.pageToken,
-      orderBy: input.orderBy,
-    });
+    const result = await api.entries(input);
 
     if (result.isErr()) {
       return err(result.error);
