@@ -17,5 +17,8 @@
   "license": "MIT",
   "devDependencies": {
     "@biomejs/biome": "^1.9.4"
+  },
+  "dependencies": {
+    "ramda": "^0.30.1"
   }
 }

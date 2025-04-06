@@ -1,5 +1,5 @@
-import type { Result } from "neverthrow";
-import type { LogId } from "./log-id";
+import type {Result} from "neverthrow";
+import type {LogId} from "./log-id";
 
 /**
  * Interface for Cloud Logging adapter
@@ -56,6 +56,9 @@ export type RawLogEntry = Record<string, unknown> & {
   insertId: LogId;
   timestamp: string;
   severity: LogSeverity;
+  jsonPayload?: Record<string, unknown>;
+  protoPayload?: Record<string, unknown>;
+  textPayload?: string;
 };
 
 export type LogSeverity =

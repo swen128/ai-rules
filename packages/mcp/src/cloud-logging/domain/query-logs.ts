@@ -1,9 +1,7 @@
-import { ok, err, type Result } from "neverthrow";
-import type { CloudLoggingApi, CloudLoggingError } from "./api";
-import type { LogCache } from "./cache";
+import { type Result, err, ok } from "neverthrow";
 import type { QueryLogsInput } from "../port/queryLogs";
-import { createLogId } from "./log-id";
-import type { RawLogEntry } from "./log-entry";
+import type { CloudLoggingApi, CloudLoggingError, RawLogEntry } from "./api";
+import type { LogCache } from "./cache";
 import { summarize } from "./log-entry";
 
 /**
@@ -17,7 +15,6 @@ export type QueryLogsResult = {
   pageSize: number;
   nextPageToken?: string;
 };
-
 
 /**
  * Query logs from Cloud Logging
